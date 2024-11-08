@@ -1,4 +1,4 @@
-name: CI Pipeline with SonarCloud
+name: CI Pipeline with SonarCloud and OWASP ZAP
 
 on:
   push:
@@ -10,33 +10,39 @@ on:
 
 jobs:
   test-and-sonarcloud:
-    name: Run Tests and SonarCloud Analysis
+    name: Run Tests, SonarCloud Analysis, and OWASP ZAP Security Scan
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Checkout code
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # Step 2: Set up Node.js for Angular app
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'  # Use the Node.js version required by your Angular project
 
+      # Step 3: Install dependencies
       - name: Install dependencies
         run: npm install
 
+      # Step 4: Install XVFB (for headless browsers)
       - name: Start xvfb (for headless browsers)
         run: |
           sudo apt-get install xvfb
           export DISPLAY=':99.0'
           Xvfb :99 -ac &
 
+      # Step 5: Run tests and generate coverage report
       - name: Run tests and generate coverage report
         run: |
           npm run test -- --watch=false --code-coverage --browsers=ChromeHeadless
         env:
           CI: true  # Ensures tests run in CI mode (prevents interactive prompts)
 
+      # Step 6: SonarCloud Scan for code quality analysis
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
         env:
@@ -50,16 +56,33 @@ jobs:
             -Dsonar.tests=src/app/tests
             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
 
-      # Step to run OWASP ZAP Scan using Docker
+      # Step 7: Docker login (authenticate to Docker Hub or other registry)
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # Step 8: Build Docker image for the app
+      - name: Build Docker image
+        run: |
+          docker build -t my-app:$GITHUB_SHA .
+
+      # Step 9: Run OWASP ZAP Security Scan (Docker)
       - name: Run OWASP ZAP Security Scan (Docker)
         run: |
           docker run -t owasp/zap2docker-stable zap-full-scan.py -t http://localhost:4200 -r zap_report.html
         env:
-          ZAP_API_KEY: ${{ secrets.ZAP_API_KEY }}  # Store your ZAP API key in GitHub secrets
+          ZAP_API_KEY: ${{ secrets.ZAP_API_KEY }}  # Optional: If you're using an API key for ZAP
 
-      # Step to upload the ZAP report as artifact
+      # Step 10: Upload ZAP Report as artifact
       - name: Upload ZAP Report
         uses: actions/upload-artifact@v3
         with:
           name: zap-report
           path: zap_report.html
+
+      # Step 11: Push Docker image to Docker registry
+      - name: Push Docker image to Docker Hub
+        run: |
+          docker push my-app:$GITHUB_SHA
