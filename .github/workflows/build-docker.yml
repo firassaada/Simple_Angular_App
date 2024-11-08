@@ -45,6 +45,6 @@ jobs:
             -Dsonar.organization=firassaada
             -Dsonar.host.url=https://sonarcloud.io
             -Dsonar.sources=src/app/modules
-            -Dsonar.tests=tests/app/modules
+            -Dsonar.tests=src/app/tests
             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
          
