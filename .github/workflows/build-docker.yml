@@ -86,7 +86,7 @@ jobs:
       # Step 11: Run Trivy container image scan
       - name: Run Trivy container image scan
         run: |
-          trivy image --skip-update my-app:$GITHUB_SHA
+          trivy image  my-app:$GITHUB_SHA
 
       # Step 12: Push Docker image to Docker registry
       - name: Push Docker image to Docker Hub
