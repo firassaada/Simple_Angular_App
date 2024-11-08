@@ -50,17 +50,10 @@ jobs:
             -Dsonar.tests=src/app/tests
             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
 
-      # Step to install ZAP
-      - name: Install OWASP ZAP
+      # Step to run OWASP ZAP Scan using Docker
+      - name: Run OWASP ZAP Security Scan (Docker)
         run: |
-          sudo apt-get update
-          sudo apt-get install -y zaproxy
-
-      # Step to run ZAP security scan
-      - name: Run OWASP ZAP Scan
-        run: |
-          # Run OWASP ZAP security scan on your deployed application
-          zap-baseline.py -t http://localhost:4200 -r zap_report.html
+          docker run -t owasp/zap2docker-stable zap-full-scan.py -t http://localhost:4200 -r zap_report.html
         env:
           ZAP_API_KEY: ${{ secrets.ZAP_API_KEY }}  # Store your ZAP API key in GitHub secrets
 
