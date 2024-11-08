@@ -18,7 +18,7 @@ describe('CallInterfaceComponent', () => {
       }).compileComponents();
     });
   
-    it('should toggle micEnabled whenn toggleMic is called', () => {
+    it('should toggle micEnabled when toggleMic is called', () => {
       const fixture = TestBed.createComponent(CallInterfaceComponent);
       const component = fixture.componentInstance;
   
