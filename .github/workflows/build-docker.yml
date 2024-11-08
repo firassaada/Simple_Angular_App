@@ -1,4 +1,4 @@
-name: CI Pipeline with SonarCloud and OWASP ZAP
+name: CI Pipeline with SonarCloud, Trivy, and OWASP ZAP
 
 on:
   push:
@@ -66,13 +66,15 @@ jobs:
       # Step 8: Build Docker image for the app
       - name: Build Docker image
         run: |
-          docker build -t my-app:$GITHUB_SHA .
-   # Install Trivy for container image scanning
+          docker build -t my-app:$GITHUB_SHA -t my-app:latest .
+
+      # Step 9: Install Trivy for container image scanning
       - name: Install Trivy
         run: |
           curl -sfL https://github.com/aquasecurity/trivy/releases/download/v0.35.0/trivy_0.35.0_Linux-64bit.deb -o trivy.deb
           sudo dpkg -i trivy.deb
-           
+
+      # Step 10: Cache Trivy DB
       - name: Cache Trivy DB
         uses: actions/cache@v3
         with:
@@ -81,12 +83,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-trivy-db-
 
-      # Run Trivy security scan on Docker image
+      # Step 11: Run Trivy container image scan
       - name: Run Trivy container image scan
         run: |
-        trivy image --skip-update my-app:$GITHUB_SHA
+          trivy image --skip-update my-app:$GITHUB_SHA
 
-      # Step 11: Push Docker image to Docker registry
+      # Step 12: Push Docker image to Docker registry
       - name: Push Docker image to Docker Hub
         run: |
           docker push my-app:$GITHUB_SHA
+          docker push my-app:latest
