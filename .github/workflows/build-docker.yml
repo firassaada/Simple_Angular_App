@@ -67,20 +67,16 @@ jobs:
       - name: Build Docker image
         run: |
           docker build -t my-app:$GITHUB_SHA .
-
-      # Step 9: Run OWASP ZAP Security Scan (Docker)
-      - name: Run OWASP ZAP Security Scan (Docker)
+   # Install Trivy for container image scanning
+      - name: Install Trivy
         run: |
-          docker run -t owasp/zap zap-full-scan.py -t http://localhost:4200 -r zap_report.html
-        env:
-          ZAP_API_KEY: ${{ secrets.ZAP_API_KEY }}  # Optional: If you're using an API key for ZAP
+          curl -sfL https://github.com/aquasecurity/trivy/releases/download/v0.35.0/trivy_0.35.0_Linux-64bit.deb -o trivy.deb
+          sudo dpkg -i trivy.deb
 
-      # Step 10: Upload ZAP Report as artifact
-      - name: Upload ZAP Report
-        uses: actions/upload-artifact@v3
-        with:
-          name: zap-report
-          path: zap_report.html
+      # Run Trivy security scan on Docker image
+      - name: Run Trivy container image scan
+        run: |
+          trivy image my-app:$GITHUB_SHA
 
       # Step 11: Push Docker image to Docker registry
       - name: Push Docker image to Docker Hub
