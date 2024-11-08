@@ -31,7 +31,7 @@ jobs:
           Xvfb :99 -ac &
       - name: Run tests and generate coverage report
         run: |
-          npm run test -- --watch=false --code-coverage
+          npm run test -- --watch=false --code-coverage --browsers=ChromeHeadless
         env:
           CI: true  # Ensures tests run in CI mode (prevents interactive prompts)
 
