@@ -1,5 +1,5 @@
 import { TestBed } from "@angular/core/testing";
-import { CallInterfaceComponent } from "./call-interface.component";
+import { CallInterfaceComponent } from "../../../../src/app/modules/call-interface/call-interface.component";
 import { ActivatedRoute } from "@angular/router";
 import { of } from "rxjs";
 
