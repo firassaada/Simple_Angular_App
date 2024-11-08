@@ -24,7 +24,11 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-
+      - name: Start xvfb
+        run: |
+          sudo apt-get install xvfb
+          export DISPLAY=':99.0'
+          Xvfb :99 -ac &
       - name: Run tests and generate coverage report
         run: |
           npm run test -- --watch=false --code-coverage
