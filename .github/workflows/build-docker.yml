@@ -41,11 +41,6 @@ jobs:
           npm run test -- --watch=false --code-coverage --browsers=ChromeHeadless
         env:
           CI: true  # Ensures tests run in CI mode (prevents interactive prompts)
-      - name: Upload coverage report
-        uses: actions/upload-artifact@v3
-        with:
-          name: coverage-report
-          path: coverage/
 
       # Step 6: SonarCloud Scan for code quality analysis
       - name: SonarCloud Scan
@@ -61,14 +56,40 @@ jobs:
             -Dsonar.tests=src/app/tests
             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
 
-      # Step 7: Docker login (authenticate to Docker Hub or other registry)
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+      # # Step 7: Docker login (authenticate to Docker Hub or other registry)
+      # - name: Log in to Docker Hub
+      #   uses: docker/login-action@v2
+      #   with:
+      #     username: ${{ secrets.DOCKER_USERNAME }}
+      #     password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Step 8: Build Docker image for the app
-      - name: Build Docker image
-        run: |
-          docker build -t my-app:$GITHUB_SHA -t my-app:latest .
+      # # Step 8: Build Docker image for the app
+      # - name: Build Docker image
+      #   run: |
+      #     docker build -t my-app:$GITHUB_SHA -t my-app:latest .
+
+      # # Step 9: Install Trivy for container image scanning
+      # - name: Install Trivy
+      #   run: |
+      #     curl -sfL https://github.com/aquasecurity/trivy/releases/download/v0.35.0/trivy_0.35.0_Linux-64bit.deb -o trivy.deb
+      #     sudo dpkg -i trivy.deb
+
+      # # Step 10: Cache Trivy DB
+      # - name: Cache Trivy DB
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: ~/.cache/trivy
+      #     key: ${{ runner.os }}-trivy-db-${{ hashFiles('**/trivy.db') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-trivy-db-
+
+      # # Step 11: Run Trivy container image scan
+      # - name: Run Trivy container image scan
+      #   run: |
+      #     trivy image  my-app:$GITHUB_SHA
+
+      # # Step 12: Push Docker image to Docker registry
+      # - name: Push Docker image to Docker Hub
+      #   run: |
+      #     docker push my-app:$GITHUB_SHA
+      #     docker push my-app:latest
