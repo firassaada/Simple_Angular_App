@@ -1,37 +1,30 @@
 <div class="container text-center">
     <div class="logo">
-        <!-- Ensure the image source is valid and sanitized to prevent XSS -->
-        <img [src]="sanitizeImageSrc()" alt="Logo" class="logo-img" />
+        <img src="images/Agent.jpg" alt="Logo" class="logo-img ">
     </div>
     <div class="agentname">
-        <!-- Null check for agentName to prevent rendering undefined/null values -->
-        {{ agentName || 'Unknown Agent' }}
+        {{agentName}}
     </div>
+    @if(!isCalling){
+    <div class="call-button ">
+        <button (click)="startCall() " class="btn btn-primary button ">Call</button>
+    </div>
+    } @else {
 
-    <!-- Check the state of isCalling with an 'else' condition -->
-    <ng-container *ngIf="!isCalling; else callActions">
-        <div class="call-button">
-            <!-- Ensure startCall() method exists and is bound correctly -->
-            <button (click)="startCall()" class="btn btn-primary button" [disabled]="!canStartCall()">Call</button>
-        </div>
-    </ng-container>
+    <div class="call-actions ">
+        <button (click)="hangUp() " class="btn btn-danger icon ">
+            <i class=" bi bi-telephone-x"></i>      
+         </button>
 
-    <ng-template #callActions>
-        <div class="call-actions">
-            <!-- Ensure hangUp() is defined and safe to call -->
-            <button (click)="hangUp()" class="btn btn-danger icon" [disabled]="!canHangUp()">
-                <i class="bi bi-telephone-x"></i>      
-            </button>
-
-            <!-- Improved mic toggle logic -->
-            <button (click)="toggleMic()" class="btn btn-secondary icon">
-                <span *ngIf="micEnabled">
-                    <i class="bi bi-mic"></i>
-                </span>
-                <span *ngIf="!micEnabled">
-                    <i class="bi bi-mic-mute"></i>
-                </span>
-            </button>
-        </div>
-    </ng-template>
+        <button (click)="toggleMic() " class="btn btn-secondary icon">
+            @if(micEnabled){
+       <span>    <i class=" bi bi-mic"></i>
+       </span>
+            }
+            @else {
+            <span ><i class="bi bi-mic-mute"></i></span>    
+            }
+        </button>
+    </div>
+    }
 </div>
