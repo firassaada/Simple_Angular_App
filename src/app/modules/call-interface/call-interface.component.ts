@@ -27,6 +27,10 @@ export class CallInterfaceComponent implements OnInit {
       await this.requestMicPermission();
       this.isCalling = true;
       this.micEnabled = true;
+      console.log('call started')
+      console.log('call started')
+      console.log('call started')
+      console.log('call started')
       // Logic for starting the call can be added here
     } catch (error) {
       console.error('Microphone permission denied', error);
@@ -47,8 +51,7 @@ export class CallInterfaceComponent implements OnInit {
   async requestMicPermission() {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      
       stream.getTracks().forEach(track => track.stop()); // Stop the mic after permission is granted
     } catch (err) {
       throw new Error('Microphone permission denied');
