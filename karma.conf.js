@@ -1,29 +1,45 @@
 module.exports = function(config) {
     config.set({
+
+        // base path
         basePath: '',
-        frameworks: ['jasmine', '@angular-devkit/build-angular'],
-        plugins: [
-            require('karma-jasmine'),
-            require('karma-chrome-launcher'),
-            require('karma-coverage'),
-            require('@angular-devkit/build-angular/plugins/karma')
+
+        // frameworks to use
+        frameworks: ['jasmine', 'karma-typescript'], // Add karma-typescript here
+
+        // list of files / patterns to load in the browser
+        files: [
+            'src/**/*.ts', // Add TypeScript files
+
         ],
-        client: {
-            clearContext: false, // Leave Jasmine Spec Runner output visible in browser
+
+        // preprocessors
+        preprocessors: {
+            'src/**/*.ts': ['karma-typescript'] // Tell Karma to preprocess TypeScript files
         },
-        reporters: ['progress', 'coverage'], // Include 'coverage' reporter
-        coverageReporter: {
-            type: 'lcov', // Format for tools like SonarCloud
-            dir: require('path').join(__dirname, './coverage'), // Output directory
-            subdir: '.',
-            includeAllSources: true, // Optional: include all sources even if not tested
-        },
+
+        // reporters
+        reporters: ['progress', 'karma-typescript'], // Optionally include karma-typescript for code coverage reports
+
+        // web server port
         port: 9876,
+
+        // enable / disable colors
         colors: true,
+
+        // logging level
         logLevel: config.LOG_INFO,
+
+        // enable / disable watching file changes
         autoWatch: true,
-        browsers: ['Chrome'], // Use 'ChromeHeadless' for CI/CD
-        singleRun: false, // Set to true if you want Karma to exit after tests
-        restartOnFileChange: true,
+
+        // browsers to launch
+        browsers: ['Chrome'],
+
+        // Continuous Integration mode
+        singleRun: false,
+
+        // concurrency level
+        concurrency: Infinity
     });
-};
+}
