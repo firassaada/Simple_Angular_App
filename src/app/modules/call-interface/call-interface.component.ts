@@ -52,4 +52,8 @@ export class CallInterfaceComponent implements OnInit {
       throw new Error('Microphone permission denied');
     }
   }
+  sanitizeImageSrc(){}
+  canStartCall(){return true
+  }
+  canHangUp() {return true}
 }
