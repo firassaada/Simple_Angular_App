@@ -30,18 +30,17 @@ describe('CallInterfaceComponent', () => {
       expect(component['micEnabled']).toBe(true);
     });
   
-    // it('should call hangUp when hangUp is called', () => {
-    //   const fixture = TestBed.createComponent(CallInterfaceComponent);
-    //   const component = fixture.componentInstance;
-  
-    //   jest.spyOn(component, 'hangUp').mockImplementation(() => {});
+   
+  it('should call hangUp and update micEnabled', () => {
+    const fixture = TestBed.createComponent(CallInterfaceComponent);
+    const component = fixture.componentInstance;
 
-  
-    //   component.hangUp();
-  
-    //   expect(component.hangUp).toHaveBeenCalled();
-    //   expect(component['micEnabled']).toBe(false); // Check the side effect of hangUp
-    // });
+    // Call the hangUp method directly
+    component.hangUp();
+
+    // Check the expected side effects of calling hangUp
+    expect(component['micEnabled']).toBe(false); // Check if micEnabled has been set to false
+  });
   
     // Add more test cases as needed
   });

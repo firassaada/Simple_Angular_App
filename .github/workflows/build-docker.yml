@@ -38,7 +38,7 @@ jobs:
       # Step 5: Run tests and generate coverage report
       - name: Run tests and generate coverage report
         run: |
-          npm run test -- --watch=false --coverage --browsers=ChromeHeadless
+          npm test
 
         env:
           CI: true  # Ensures tests run in CI mode (prevents interactive prompts)
