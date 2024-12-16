@@ -43,6 +43,11 @@ export class CallInterfaceComponent implements OnInit {
     // Logic for hanging up the call can be added here
   }
 
+  hangssUp() {
+    this.isCalling = false;
+    this.micEnabled = false;
+    // Logic for hanging up the call can be added here
+  }
   toggleMic() {
     this.micEnabled = !this.micEnabled;
     // Logic for enabling/disabling the mic can be added here
