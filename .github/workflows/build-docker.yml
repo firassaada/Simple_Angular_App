@@ -61,13 +61,13 @@ jobs:
         run: |
           docker build -t ${{ secrets.DOCKER_USERNAME }}/angular-app:latest .
        # Step 8: Run Trivy Scan (Security Vulnerability Scan)
-       - name: Run Trivy Scan
-       uses: aquasecurity/trivy-action@master
-       with:
-         image-ref: '${{ secrets.DOCKERHUB_USERNAME }}/angular-app:latest'
-         format: 'table'
-         exit-code: '1'  # Fail the pipeline if vulnerabilities are found
-         severity: 'CRITICAL,HIGH'
+      - name: Run Trivy Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: '${{ secrets.DOCKERHUB_USERNAME }}/angular-app:latest'
+          format: 'table'
+          exit-code: '1'  # Fail the pipeline if vulnerabilities are found
+          severity: 'CRITICAL,HIGH'
       # # Step 7: SDocker login (autxxhentsicate to Docker Hub or other registry)
       # - name: Log in to Docker Hub
       #   uses: docker/login-action@v2
