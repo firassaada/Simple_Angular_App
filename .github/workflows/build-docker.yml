@@ -78,9 +78,13 @@ jobs:
           format: 'table'
           exit-code: '1'  # Fail the pipeline if vulnerabilities are found
           severity: 'CRITICAL,HIGH'
-  
+    # Step 10: Save artifact
+      - name: Upload Trivy Report as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: trivy-scan-report
+          path: trivy-report.json
 
-      # # Step 8: Build Docker image for the app
       # - name: Build Docker image
       #   run: |
       #     docker build -t my-app:$GITHUB_SHA -t my-app:latest .
